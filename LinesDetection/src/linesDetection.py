@@ -9,8 +9,6 @@ def lines_from_img(orig_img, save_results=False):
 
     # gray
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    plt.hist(gray.ravel(), 256, [0,256])
-    plt.show()
 
     # binarize
     binarized = gray
@@ -46,8 +44,9 @@ def lines_from_img(orig_img, save_results=False):
         return []
     return lines
 
-def length(p1, p2):
-    x1, y1, x2, y2 = p1, p2
+def distance(p1, p2):
+    x1, y1 = p1
+    x2, y2 = p2
     return sqrt((x1 - x2)**2 + (y1 - y2)**2)
 
 def draw_line(image, line, color=(0, 255, 0)):
@@ -62,7 +61,7 @@ def longest_line(lines):
     i = 0
     for line in lines:
         x1, y1, x2, y2 = line[0]
-        length = sqrt((x1 - x2)**2 + (y1 - y2)**2)
+        length = distance((x1,y1), (x2,y2))
         if length > longest:
             longest = length
             index = i
