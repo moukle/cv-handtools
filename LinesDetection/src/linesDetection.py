@@ -31,14 +31,14 @@ def lines_from_img(orig_img, save_results=False):
     # thicc edges
     edges = noNoise
     edges = cv.Canny(edges, 100, 255)
-    edges = cv.dilate(edges, (5,5), iterations=20)
+    edges = cv.dilate(edges, (5,5), iterations=10)
 
-    lines = cv.HoughLinesP(edges, cv.HOUGH_PROBABILISTIC, np.pi/180, 20, minLineLength=10, maxLineGap=40)
+    lines = cv.HoughLinesP(edges, cv.HOUGH_PROBABILISTIC, np.pi/180, 60, minLineLength=10, maxLineGap=40)
 
     if save_results:
-        cv.imwrite('orig.jpg', orig_img, [int(cv.IMWRITE_JPEG_QUALITY), 90])
-        cv.imwrite('edges.jpg', edges, [int(cv.IMWRITE_JPEG_QUALITY), 90])
-        cv.imwrite('bin.jpg', binarized, [int(cv.IMWRITE_JPEG_QUALITY), 90])
+        save_image(orig_img, 'orig')
+        save_image(edges, 'edges')
+        save_image(binarized, 'bin')
     
     if type(lines) != np.ndarray:
         return []
@@ -69,6 +69,9 @@ def longest_line(lines):
 
     return longest, index
 
+def save_image(img, name):
+    cv.imwrite(name+'.jpg', img, [int(cv.IMWRITE_JPEG_QUALITY), 90])
+
 def px_mm_ratio(orig_img, ref_length_in_mm):
     img = orig_img
 
@@ -78,7 +81,12 @@ def px_mm_ratio(orig_img, ref_length_in_mm):
     up_yellow = np.array([48, 255, 255])
     mask = cv.inRange(hsv, low_yellow, up_yellow)
     res = cv.bitwise_and(img, img, mask=mask)
+    save_image(res, "yellowMask")
 
     lines = lines_from_img(res)
-    longest, _ = longest_line(lines)
-    return longest / ref_length_in_mm
+    longest, index = longest_line(lines)
+
+    draw_line(img, lines[index], (255,0,0))
+    save_image(img, "yellowRefLine")
+
+    return ref_length_in_mm / longest

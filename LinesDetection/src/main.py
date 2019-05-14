@@ -2,7 +2,7 @@ import os
 import cv2 as cv
 import linesDetection as ld
 
-IMGS_PATH = "../imgs/"
+IMGS_PATH = "../imgsRef/"
 images = []
 
 for filename in os.listdir(IMGS_PATH):
@@ -14,8 +14,8 @@ lines = ld.lines_from_img(img, True)
 longest_line_length, longest_line_index = ld.longest_line(lines)
 
 # Get real size
-px_mm_ratio = ld.px_mm_ratio(img, ref_length_in_mm=20)
-print("Pixel to mm ratio: {}".format(px_mm_ratio))
+px_mm_ratio = ld.px_mm_ratio(img, ref_length_in_mm=50)
+print("Pixel to mm ratio: 1:{}".format(px_mm_ratio))
 real_length = longest_line_length * px_mm_ratio
 print("Longest edge is {}mm /  {}px".format(real_length, longest_line_length))
 
