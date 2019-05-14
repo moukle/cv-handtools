@@ -131,4 +131,32 @@ Accuracy: 45.72%
 
 ---
 
-## Praktikum 2
+## Praktikum 2 - Einarbeitung in OpenCV
+
+### Linien aus Bild extrahieren
+1. Bild schwarzweiß
+2. Schwarzweiß binarisieren
+    - Wie? Adaptiv nur bedingt gute Ergebnisse
+3. Noise entfernen
+    - Opening/Closing, Blur
+4. Edges mithilfe von Canny detektieren
+5. Linien mit `HoughLines` (Probabilistic) bestimmt
+    - `HoughLinesP` gibt die Extremwerte der Linie zurück (P1, P2)
+
+### Längste Linie finden
+1. Über alle Linien iterieren
+2. Euklidischen Abstand bestimmen
+    - $Länge = \sqrt{(x1 -x2)^2 + (y1 - y2)^2}$
+3. Längste Linie merken und returnen
+
+### Pixel zu Milimeter
+1. Bild mit Referenzobjekt erstellen (Objekt hebt sich farblich ab; Länge bekannt)
+2. Aus Bild nur Objekt maskieren
+3. Aus maskiertem Bild längste Linie ermitteln
+4. Pixel zu Milimeter verhältnis bestimmen: `ref_mm_length / longest_line_px`
+5. Längste Linie des Werkstücks mit Ratio multiplizieren
+
+### Probleme
+- Werkstück kleiner als Referenzobjekt
+- Nur längste Kante ermittelt (nicht Breite)
+- Objekt liegt ungünstig
