@@ -42,25 +42,43 @@ def lines_from_img(orig_img, save_results=False):
     
     if type(lines) != np.ndarray:
         return []
+
+    # flatten array by 1 dim
+    amount, z, features = lines.shape
+    lines = lines.reshape(amount*z, features)
     return lines
+
+
+def draw_line(image, line, color=(0, 255, 0)):
+    x1, y1, x2, y2 = line
+    # cv.line(image, (x1, y1), (x2, y2), color, 10)
+    pts = np.array([[x1, y1 ], [x2 , y2]], np.int32)
+    cv.polylines(image, [pts], True, color, 10)
+
+
+def length(line):
+    x1, y1, x2, y2 = line
+    return sqrt((x1 - x2)**2 + (y1 - y2)**2)
+
+
+def sort_lines_by_length(lines):
+    lines_sorted = list(lines)
+    lines_sorted.sort(key=distance, reverse=True)
+    return lines_sorted
+
 
 def distance(p1, p2):
     x1, y1 = p1
     x2, y2 = p2
     return sqrt((x1 - x2)**2 + (y1 - y2)**2)
 
-def draw_line(image, line, color=(0, 255, 0)):
-    x1, y1, x2, y2 = line[0]
-    # cv.line(image, (x1, y1), (x2, y2), color, 10)
-    pts = np.array([[x1, y1 ], [x2 , y2]], np.int32)
-    cv.polylines(image, [pts], True, color, 10)
 
 def longest_line(lines):
     longest = 0
     index = -1
     i = 0
     for line in lines:
-        x1, y1, x2, y2 = line[0]
+        x1, y1, x2, y2 = line
         length = distance((x1,y1), (x2,y2))
         if length > longest:
             longest = length
@@ -69,8 +87,6 @@ def longest_line(lines):
 
     return longest, index
 
-def save_image(img, name):
-    cv.imwrite(name+'.jpg', img, [int(cv.IMWRITE_JPEG_QUALITY), 90])
 
 def px_mm_ratio(orig_img, ref_length_in_mm):
     img = orig_img
@@ -90,3 +106,7 @@ def px_mm_ratio(orig_img, ref_length_in_mm):
     save_image(img, "yellowRefLine")
 
     return ref_length_in_mm / longest
+
+
+def save_image(img, name):
+    cv.imwrite(name+'.jpg', img, [int(cv.IMWRITE_JPEG_QUALITY), 90])
