@@ -132,8 +132,12 @@ Accuracy: 45.72%
 ---
 
 ## Praktikum 2 - Einarbeitung in OpenCV
+### Einleitung
+- Aufgabe / Ziel
+- CV Funktionen
 
-### Linien aus Bild extrahieren
+### Konzept
+#### Linien aus Bild extrahieren
 1. Bild schwarzweiß
 2. Schwarzweiß binarisieren
     - Wie? Adaptiv nur bedingt gute Ergebnisse
@@ -143,25 +147,46 @@ Accuracy: 45.72%
 5. Linien mit `HoughLines` (Probabilistic) bestimmt
     - `HoughLinesP` gibt die Extremwerte der Linie zurück (P1, P2)
 
-### Längste Linie finden
+> bin.jpg, edges.jpg, lines.jpg
+
+#### Längste Linie finden
 1. Über alle Linien iterieren
 2. Euklidischen Abstand bestimmen
-    - $Länge = \sqrt{(x1 -x2)^2 + (y1 - y2)^2}$
+    $$Länge = \sqrt{(x1 -x2)^2 + (y1 - y2)^2}$$
 3. Längste Linie merken und returnen
 
-### Pixel zu Milimeter
+> longest.jpg
+
+#### Pixel zu Milimeter
 1. Bild mit Referenzobjekt erstellen (Objekt hebt sich farblich ab; Länge bekannt)
 2. Aus Bild nur Objekt maskieren
 3. Aus maskiertem Bild längste Linie ermitteln
 4. Pixel zu Milimeter verhältnis bestimmen: `ref_mm_length / longest_line_px`
 5. Längste Linie des Werkstücks mit Ratio multiplizieren
 
+> ref.jpg
+
 ### Probleme
+- Händische Binarisierung
 - Werkstück kleiner als Referenzobjekt
-- Nur längste Kante ermittelt (nicht Breite)
+- Nur längste Kante ermittelt (nicht Breite), aber siehe Konzept:
+
+    0. Grundannahme: Werkstück besitzt einen langen gleichseitigen Griff
+    1. Die **beiden** längsten Linien finden
+    2. Abstand zw. beiden Linien gibt Breite an
+
 - Objekt liegt ungünstig
 
-### Konzept: Breite bestimmen
-0. Grundannahme: Werkstück besitzt einen langen gleichseitigen Griff
-1. Die beiden längsten Linien finden
-2. Abstand zw. beiden Linien gibt Breite an
+
+### Referenzen
+<!---
+**The quick brown [fox][1], jumped over the lazy [dog][2].**
+
+[1]: https://en.wikipedia.org/wiki/Fox "Wikipedia: Fox"
+[2]: https://en.wikipedia.org/wiki/Dog "Wikipedia: Dog"
+-->
+
+---
+
+## Praktikum 3
+Werkzeuge klassifizieren (VGG16?)
