@@ -160,3 +160,8 @@ Accuracy: 45.72%
 - Werkstück kleiner als Referenzobjekt
 - Nur längste Kante ermittelt (nicht Breite)
 - Objekt liegt ungünstig
+
+### Konzept: Breite bestimmen
+0. Grundannahme: Werkstück besitzt einen langen gleichseitigen Griff
+1. Die beiden längsten Linien finden
+2. Abstand zw. beiden Linien gibt Breite an
