@@ -75,7 +75,7 @@ def distance(p1, p2):
 
 def longest_line(lines):
     longest = 0
-    index = -1
+    index = None
     i = 0
     for line in lines:
         x1, y1, x2, y2 = line
@@ -101,11 +101,12 @@ def px_mm_ratio(orig_img, ref_length_in_mm):
 
     lines = lines_from_img(res)
     longest, index = longest_line(lines)
-
-    draw_line(img, lines[index], (255,0,0))
-    save_image(img, "yellowRefLine")
-
-    return ref_length_in_mm / longest
+    
+    if index:
+        draw_line(img, lines[index], (255,0,0))
+        save_image(img, "yellowRefLine")
+        return ref_length_in_mm / longest
+    return 0
 
 
 def save_image(img, name):
