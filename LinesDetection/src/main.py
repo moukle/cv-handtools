@@ -9,7 +9,7 @@ for filename in os.listdir(IMGS_PATH):
     img = cv.imread(IMGS_PATH + filename)
     images.append(img)
 
-img = images[2]
+img = images[5]
 lines = ld.lines_from_img(img, True)
 longest_line_length, longest_line_index = ld.longest_line(lines)
 

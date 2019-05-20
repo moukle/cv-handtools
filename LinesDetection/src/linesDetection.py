@@ -19,7 +19,7 @@ def lines_from_img(orig_img, save_results=False):
     # binarized = cv.adaptiveThreshold(binarized,255,cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY,11,2)
 
     # remove noise
-    noNoise = binarized
+    noNoise = gray
     # opening / closing
     kernel = np.ones((5,5),np.uint8)
     noNoise = cv.morphologyEx(noNoise, cv.MORPH_OPEN, kernel)
@@ -31,15 +31,16 @@ def lines_from_img(orig_img, save_results=False):
     # thicc edges
     edges = noNoise
     edges = cv.Canny(edges, 100, 255)
-    edges = cv.dilate(edges, (5,5), iterations=10)
+    kernel = np.ones((2,2), np.uint8)
+    edges = cv.dilate(edges, kernel, iterations=1)
 
-    lines = cv.HoughLinesP(edges, cv.HOUGH_PROBABILISTIC, np.pi/180, 60, minLineLength=10, maxLineGap=40)
+    lines = cv.HoughLinesP(edges, cv.HOUGH_PROBABILISTIC, np.pi/180, 10, minLineLength=10, maxLineGap=25)
 
     if save_results:
         save_image(orig_img, 'orig')
         save_image(edges, 'edges')
         save_image(binarized, 'bin')
-    
+
     if type(lines) != np.ndarray:
         return []
 
@@ -53,7 +54,7 @@ def draw_line(image, line, color=(0, 255, 0)):
     x1, y1, x2, y2 = line
     # cv.line(image, (x1, y1), (x2, y2), color, 10)
     pts = np.array([[x1, y1 ], [x2 , y2]], np.int32)
-    cv.polylines(image, [pts], True, color, 10)
+    cv.polylines(image, [pts], True, color, 3)
 
 
 def length(line):
@@ -93,7 +94,9 @@ def px_mm_ratio(orig_img, ref_length_in_mm):
 
     hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV)
     # assuming the ref obj is yellow
-    low_yellow = np.array([18, 50, 50])
+    # low_yellow = np.array([18, 100, 50])
+    # up_yellow = np.array([48, 255, 255])
+    low_yellow = np.array([20, 120, 150])
     up_yellow = np.array([48, 255, 255])
     mask = cv.inRange(hsv, low_yellow, up_yellow)
     res = cv.bitwise_and(img, img, mask=mask)
@@ -102,7 +105,7 @@ def px_mm_ratio(orig_img, ref_length_in_mm):
     lines = lines_from_img(res)
     longest, index = longest_line(lines)
     
-    if index:
+    if index != None:
         draw_line(img, lines[index], (255,0,0))
         save_image(img, "yellowRefLine")
         return ref_length_in_mm / longest
