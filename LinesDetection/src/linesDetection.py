@@ -96,7 +96,7 @@ def px_mm_ratio(orig_img, ref_length_in_mm):
     # assuming the ref obj is yellow
     # low_yellow = np.array([18, 100, 50])
     # up_yellow = np.array([48, 255, 255])
-    low_yellow = np.array([20, 120, 150])
+    low_yellow = np.array([20, 60, 70])
     up_yellow = np.array([48, 255, 255])
     mask = cv.inRange(hsv, low_yellow, up_yellow)
     res = cv.bitwise_and(img, img, mask=mask)
