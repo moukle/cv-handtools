@@ -1,10 +1,11 @@
 # Install
-```
-pip install --user pipenv
-pipenv install
+``` sh
+$ pip install --user pipenv           # add pipenv to $PATH
+$ pipenv install
 ```
 
 # Usage
-```
-pipenv run python network.py
+``` sh
+$ ./crawl_data.sh                     # download training images
+$ pipenv run python network.py        # run network
 ```

@@ -1,2 +1,3 @@
 LinesDetection/src/*.jpg
 LinesDetection/src/__pycache__/
+ToolClassification/dataset

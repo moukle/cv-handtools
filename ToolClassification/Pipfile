@@ -4,11 +4,15 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+pylint = "*"
 
 [packages]
 keras = "*"
 numpy = "*"
 tensorflow = "*"
+opencv-python = "*"
+imagenetscraper = "*"
+split-folders = "*"
 
 [requires]
 python_version = "3.7"
