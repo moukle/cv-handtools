@@ -1,3 +1,5 @@
 LinesDetection/src/*.jpg
 LinesDetection/src/__pycache__/
 ToolClassification/dataset
+ToolClassification/__pycache__
+ToolClassification/tool_model.h5

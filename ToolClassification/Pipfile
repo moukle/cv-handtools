@@ -9,10 +9,10 @@ pylint = "*"
 [packages]
 keras = "*"
 numpy = "*"
-tensorflow = "*"
 opencv-python = "*"
 imagenetscraper = "*"
 split-folders = "*"
+tensorflow-gpu = "*"
 
 [requires]
 python_version = "3.7"
