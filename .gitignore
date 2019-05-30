@@ -1,7 +1,10 @@
 LinesDetection/src/*.jpg
 LinesDetection/src/__pycache__/
 
-ToolClassification/dataset/*
+ToolClassification/dataset/split
+ToolClassification/dataset/unsorted
+ToolClassification/dataset/128x128
+
 ToolClassification/tool_model.h5
 ToolClassification/.vscode
 ToolClassification/__pycache__
