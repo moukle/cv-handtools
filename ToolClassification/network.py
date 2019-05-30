@@ -12,9 +12,6 @@ x_train, y_train = data.training()
 x_val, y_val = data.validation()
 x_test, y_test = data.test()
 
-x_train = np.concatenate([arr[np.newaxis] for arr in x_train]).astype('float32')
-x_val = np.concatenate([arr[np.newaxis] for arr in x_val]).astype('float32')
-x_test = np.concatenate([arr[np.newaxis] for arr in x_test]).astype('float32')
 num_classes = len(set(y_train))
 image_shape = x_train[0].shape
 # -------------------------------------

@@ -20,6 +20,7 @@ def load_x_y(data_path):
 
     all_images = [cv2.imread(file) for file in all_image_paths]
 
+    all_images = np.concatenate([arr[np.newaxis] for arr in all_images]).astype('float32')
     return all_images, all_image_labels
 
 def training():
