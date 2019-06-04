@@ -4,7 +4,8 @@ import random
 import cv2
 import numpy as np
 
-data_path = "dataset/split/"
+data_path = "dataset/128x128/split/"
+# data_path = "dataset/split/"
 
 def load_x_y(data_path):
     data_root = pathlib.Path(data_path)
