@@ -1,6 +1,10 @@
 from keras.applications.vgg16 import VGG16
 from keras.layers import Input, Flatten, Dense, Dropout
 from keras.models import Model
+from keras import metrics
+# from keras import backend as K
+
+import tensorflow as tf
 
 import numpy as np
 import load_dataset as data
@@ -53,15 +57,16 @@ my_model = Model(inputs=input, outputs=x)
 # -------------------------------------
 # USING THE MODEL
 # -------------------------------------
+def class_accuracy(y_true, y_pred):
+        return np.mean(np.equal(np.argmax(y_true, axis=-1), np.argmax(y_pred, axis=-1)))
+
 # training the model
-my_model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-hist = my_model.fit(x_train, y_train, epochs=1, validation_data=(x_val, y_val), verbose=1)
+my_model.compile(loss='binary_crossentropy', optimizer='adam', metrics=[metrics.categorical_accuracy])
+# my_model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+hist = my_model.fit(x_train, y_train, epochs=8, validation_data=(x_val, y_val), verbose=1)
 my_model.save('tool_model.h5')
 
 # predict
 prediction = my_model.predict(x_test)
-
-def class_accuracy(y_true, y_pred):
-        return np.mean(np.equal(np.argmax(y_true), np.argmax(y_pred, axis=-1)))
 
 print(class_accuracy(y_test, prediction))
