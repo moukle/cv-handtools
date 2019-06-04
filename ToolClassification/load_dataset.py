@@ -18,10 +18,15 @@ def load_x_y(data_path):
     all_image_labels = [label_to_index[pathlib.Path(path).parent.name]
                     for path in all_image_paths]
 
-    all_images = [cv2.imread(file) for file in all_image_paths]
+    labels_size = len(all_image_labels)
+    num_classes = len(set(all_image_labels))
+    all_image_labels_hot = np.zeros((labels_size, num_classes))
+    all_image_labels_hot[np.arange(labels_size), all_image_labels] = 1
 
+    all_images = [cv2.imread(file) for file in all_image_paths]
     all_images = np.concatenate([arr[np.newaxis] for arr in all_images]).astype('float32')
-    return all_images, all_image_labels
+
+    return all_images, all_image_labels_hot, num_classes
 
 def training():
     return load_x_y(data_path+"train")
