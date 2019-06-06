@@ -51,6 +51,7 @@ def union(a,b):
   h = max(a[1]+a[3], b[1]+b[3]) - y
   return (x, y, w, h)
 
+
 def intersection(a,b):
   x = max(a[0], b[0])
   y = max(a[1], b[1])
@@ -58,17 +59,6 @@ def intersection(a,b):
   h = min(a[1]+a[3], b[1]+b[3]) - y
   if w<0 or h<0: return False # or (0,0,0,0) ?
   return (x, y, w, h)
-
-def draw_rectangles(image, rectangles):
-    img = image
-    for rect in rectangles:
-        x,y,w,h = rect
-        cv.rectangle(img, (x,y), (x+w,y+h), (255,255,0), 2)
-    return img
-
-def save_image(img, name):
-    cv.imwrite(name+'.jpg', img, [int(cv.IMWRITE_JPEG_QUALITY), 90])
-
 
 def predict_labels(model, image, rectangles):
     TOOLLABELS = { 0: "background", 1: "hammer", 2: "wrench" }
@@ -85,8 +75,6 @@ def predict_labels(model, image, rectangles):
         # PREDICT
         y_pred = model.predict(resize)
         labels.append(TOOLLABELS[np.argmax(y_pred)])
-
-        # cv.putText(img,label,(x,y), font, 4,(255,255,255),2,cv.LINE_AA)
     return labels
     
 
@@ -100,6 +88,18 @@ def write_labels_on_image(image, labels, rectangles):
     return img
 
 
+def draw_rectangles(image, rectangles):
+    img = image
+    for rect in rectangles:
+        x,y,w,h = rect
+        cv.rectangle(img, (x,y), (x+w,y+h), (255,255,0), 2)
+    return img
+
+
+def save_image(img, name):
+    cv.imwrite(name+'.jpg', img, [int(cv.IMWRITE_JPEG_QUALITY), 90])
+
+
 if __name__ == "__main__":
     orig_img = cv.imread('dataset/test_image5.jpg')
     rectangles = get_rectangles_from_image(orig_img)
@@ -110,4 +110,5 @@ if __name__ == "__main__":
     labeled_image = write_labels_on_image(orig_img, labels, rectangles)
     labeled_image = draw_rectangles(labeled_image, rectangles)
     save_image(labeled_image, 'labeledImage')
-
+    cv.imshow('labeled_image', labeled_image)
+    cv.waitKey(0)
