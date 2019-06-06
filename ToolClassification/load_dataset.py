@@ -4,7 +4,7 @@ import random
 import cv2
 import numpy as np
 
-data_path = "dataset/128x128/split/"
+data_path = "dataset/split/"
 # data_path = "dataset/split/"
 
 def load_x_y(data_path):
@@ -16,6 +16,7 @@ def load_x_y(data_path):
 
     label_names = sorted(item.name for item in data_root.glob('*/') if item.is_dir())
     label_to_index = dict((name, index) for index,name in enumerate(label_names))
+    print(label_to_index)
     all_image_labels = [label_to_index[pathlib.Path(path).parent.name]
                     for path in all_image_paths]
 
@@ -25,6 +26,8 @@ def load_x_y(data_path):
     all_image_labels_hot[np.arange(labels_size), all_image_labels] = 1
 
     all_images = [cv2.imread(file) for file in all_image_paths]
+    all_images = [cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) for img in all_images]
+    all_images = [cv2.cvtColor(img, cv2.COLOR_GRAY2BGR) for img in all_images]
     all_images = np.concatenate([arr[np.newaxis] for arr in all_images]).astype('float32')
 
     return all_images, all_image_labels_hot, num_classes

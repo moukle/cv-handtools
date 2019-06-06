@@ -20,7 +20,6 @@ x_test, y_test, _ = data.test()
 image_shape = x_train[0].shape
 
 # y_test_hot = np.zeros()
-print(len(y_test))
 # -------------------------------------
 
 
@@ -44,7 +43,9 @@ output_vgg16_conv = model_vgg16_conv(input)
 x = Flatten(name='flatten')(output_vgg16_conv)
 x = Dense(256, activation='relu', name='fc1')(x)
 x = Dense(256, activation='relu', name='fc2')(x)
+
 x = Dense(num_classes, activation='sigmoid', name='predictions')(x)
+# x = Dense(num_classes, activation='softmax', name='predictions')(x)
 
 # Create your own model 
 my_model = Model(inputs=input, outputs=x)
@@ -57,16 +58,16 @@ my_model = Model(inputs=input, outputs=x)
 # -------------------------------------
 # USING THE MODEL
 # -------------------------------------
-def class_accuracy(y_true, y_pred):
-        return np.mean(np.equal(np.argmax(y_true, axis=-1), np.argmax(y_pred, axis=-1)))
+# def class_accuracy(y_true, y_pred):
+#         return np.mean(np.equal(np.argmax(y_true, axis=-1), np.argmax(y_pred, axis=-1)))
 
 # training the model
 my_model.compile(loss='binary_crossentropy', optimizer='adam', metrics=[metrics.categorical_accuracy])
-# my_model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+# my_model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 hist = my_model.fit(x_train, y_train, epochs=8, validation_data=(x_val, y_val), verbose=1)
 my_model.save('tool_model.h5')
 
 # predict
 prediction = my_model.predict(x_test)
 
-print(class_accuracy(y_test, prediction))
+# print(class_accuracy(y_test, prediction))
