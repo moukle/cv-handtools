@@ -61,7 +61,7 @@ def intersection(a,b):
   return (x, y, w, h)
 
 def predict_labels(model, image, rectangles):
-    TOOLLABELS = { 0: "background", 1: "hammer", 2: "wrench" }
+    TOOLLABELS = { 0: "background", 1: "hammer", 2: "plane", 3: "wrench" }
     TARGETSIZE = (128, 128)
 
     labels = []
@@ -74,6 +74,7 @@ def predict_labels(model, image, rectangles):
 
         # PREDICT
         y_pred = model.predict(resize)
+        print(y_pred)
         labels.append(TOOLLABELS[np.argmax(y_pred)])
     return labels
     

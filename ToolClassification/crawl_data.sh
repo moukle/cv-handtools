@@ -32,9 +32,9 @@ sysnet_id="n02680754"
 $scraper $sysnet_id $folder_unsorted/wrench $size $quiet
 
 # plane
-# echo "Downloading plane ..."
-# sysnet_id="n03954731"
-# $scraper $sysnet_id $folder_unsorted/plane $size $quiet
+echo "Downloading plane ..."
+sysnet_id="n03954731"
+$scraper $sysnet_id $folder_unsorted/plane $size $quiet
 
 # background
 # http://slazebni.cs.illinois.edu/research/uiuc_texture_dataset.zip

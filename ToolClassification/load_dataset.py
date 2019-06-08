@@ -29,7 +29,7 @@ def load_x_y(data_path):
     all_images = np.concatenate([arr[np.newaxis] for arr in all_images]).astype('float32')
 
     print(label_to_index)
-    return all_images, all_image_labels_hot, num_classes
+    return all_images, all_image_labels, num_classes
 
 def training():
     return load_x_y(data_path+"train")
