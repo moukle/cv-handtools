@@ -6,11 +6,12 @@ folder_split=$folder_path/split
 
 # delete current dataset
 echo "Deleting current dataset"
-rm -rf $folder_unsorted $folder_split
+rm -rf $folder_unsorted/* $folder_split/*
 
+sizepx=128
 # SETTINGS
 scraper="pipenv run imagenetscraper"
-size="--size 64,64"
+size="--size $sizepx,$sizepx"
 quiet=""
 quiet="--quiet"
 
@@ -35,6 +36,14 @@ echo "Downloading plane ..."
 sysnet_id="n03954731"
 $scraper $sysnet_id $folder_unsorted/plane $size $quiet
 
+# background
+# http://slazebni.cs.illinois.edu/research/uiuc_texture_dataset.zip
+echo "Resizing UIUC textures ..."
+mkdir $folder_unsorted/background
+for file in $folder_path/uiuc_texture/*.jpg; do
+    fileName=$(basename "$file")
+    convert $file -resize $sizepx\x$sizepx! $folder_unsorted/background/$fileName
+done
 
 #### SPLIT IN TRAIN / VAL / TEST
 echo "Splitting data in train/val/test dataset ..."
