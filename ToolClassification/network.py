@@ -2,49 +2,50 @@ from keras.applications.vgg16 import VGG16
 from keras.layers import Input, Flatten, Dense, Dropout
 from keras.models import Model
 from keras import metrics
+from keras.preprocessing.image import ImageDataGenerator
+from keras.applications.mobilenet import preprocess_input
 
 import tensorflow as tf
 import numpy as np
+import matplotlib.pyplot as plt
 
-import load_dataset as data
 
 # --------------------------------------------------------------------------
 # LOADING THE DATA
 # -------------------------------------
-x_train, y_train, num_classes = data.training()
-x_val, y_val, _ = data.validation()
-x_test, y_test, _ = data.test()
+train_datagen=ImageDataGenerator(preprocessing_function=preprocess_input) #included in our dependencies
 
-image_shape = x_train[0].shape
+train_generator=train_datagen.flow_from_directory('dataset/unsorted',
+                                                 target_size=(224,224),
+                                                 color_mode='rgb',
+                                                 batch_size=32,
+                                                 class_mode='categorical',
+                                                 shuffle=True)
+
 # --------------------------------------------------------------------------
 # --------------------------------------------------------------------------
 # DEFINING THE MODEL
 # --------------------------------------------------------------------------
 # Get back the convolutional part of a VGG network trained on ImageNet
-model_vgg16_conv = VGG16(weights='imagenet', include_top=False)
+model_vgg16_conv = VGG16(weights='imagenet', include_top=False, input_shape=(224,224,3))
 
 # Freeze vgg16 base weights
 for layer in model_vgg16_conv.layers:
     layer.trainable = False
 
-# Create your own input format
-input = Input(shape=image_shape,name = 'image_input')
-
-# Use the generated model 
-output_vgg16_conv = model_vgg16_conv(input)
-
 # Add the fully-connected layers 
-x = Flatten(name='flatten')(output_vgg16_conv)
-x = Dense(256, activation='relu', name='fc1')(x)
-x = Dense(256, activation='relu', name='fc2')(x)
+x = model_vgg16_conv.output
+x = Flatten(name='flatten')(x)
+x = Dense(512, activation='relu', name='fc1')(x)
+x = Dense(1024, activation='relu', name='fc2')(x)
 # x = Dense(num_classes, activation='sigmoid', name='predictions')(x)
 x = Dense(num_classes, activation='softmax', name='predictions')(x)
 
 # Create your own model 
-my_model = Model(inputs=input, outputs=x)
+my_model = Model(inputs=model_vgg16_conv.input, outputs=x)
 
 # model_vgg16_conv.summary()
-# my_model.summary()
+my_model.summary()
 # --------------------------------------------------------------------------
 
 def class_accuracy(y_true, y_pred):
@@ -56,10 +57,13 @@ def class_accuracy(y_true, y_pred):
 # --------------------------------------------------------------------------
 # training the model
 # my_model.compile(loss='binary_crossentropy', optimizer='adam', metrics=[metrics.categorical_accuracy])
-my_model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-hist = my_model.fit(x_train, y_train, epochs=8, validation_data=(x_val, y_val), verbose=1)
-my_model.save('tool_model.h5')
+# my_model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+# history = my_model.fit(x_train, y_train, epochs=20, batch_size=32, validation_data=(x_val, y_val), verbose=1)
+my_model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-# predict
-prediction = my_model.predict(x_test)
-print(class_accuracy(y_test, prediction))
+step_size_train=train_generator.n//train_generator.batch_size
+history = my_model.fit_generator(generator=train_generator,
+                   steps_per_epoch=step_size_train,
+                   epochs=10)
+
+my_model.save('tool_model.h5')

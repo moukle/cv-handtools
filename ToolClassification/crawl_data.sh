@@ -8,7 +8,7 @@ folder_split=$folder_path/split
 echo "Deleting current dataset"
 rm -rf $folder_unsorted/* $folder_split/*
 
-sizepx=128
+sizepx=224
 # SETTINGS
 scraper="pipenv run imagenetscraper"
 size="--size $sizepx,$sizepx"
