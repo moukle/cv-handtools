@@ -33,6 +33,11 @@ def get_merged_rectangles_from_contours(contours):
 
     rects, _ = cv.groupRectangles(rects, 1, 0.2)
 
+    merged = merge_rectangles(rects)
+    return merge_rectangles(merged)
+
+
+def merge_rectangles(rects):
     merged = []
     for a in rects:
         bigRect = a
@@ -62,7 +67,8 @@ def intersection(a,b):
 
 def predict_labels(model, image, rectangles):
     TOOLLABELS = { 0: "background", 1: "hammer", 2: "plane", 3: "wrench" }
-    TARGETSIZE = (128, 128)
+    # TOOLLABELS = { 0: "hammer", 1: "plane", 2: "wrench" }
+    TARGETSIZE = (224, 224)
 
     labels = []
     for rect in rectangles:
@@ -74,8 +80,8 @@ def predict_labels(model, image, rectangles):
 
         # PREDICT
         y_pred = model.predict(resize)
-        print(y_pred)
         labels.append(TOOLLABELS[np.argmax(y_pred)])
+        print(y_pred)
     return labels
     
 
@@ -102,7 +108,7 @@ def save_image(img, name):
 
 
 if __name__ == "__main__":
-    orig_img = cv.imread('dataset/test_image5.jpg')
+    orig_img = cv.imread('dataset/testing/5.jpg')
     rectangles = get_rectangles_from_image(orig_img)
 
     model = load_model('tool_model.h5')

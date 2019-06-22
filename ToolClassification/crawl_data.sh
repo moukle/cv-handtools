@@ -1,50 +1,37 @@
 #!/bin/sh
 
-folder_path=dataset
-folder_unsorted=$folder_path/unsorted
-folder_split=$folder_path/split
-
-# delete current dataset
-echo "Deleting current dataset"
-rm -rf $folder_unsorted/* $folder_split/*
-
-sizepx=128
 # SETTINGS
-scraper="pipenv run imagenetscraper"
-size="--size $sizepx,$sizepx"
-quiet=""
-quiet="--quiet"
+folder_path=dataset
+folder_training=$folder_path/training
+sizepx=224
 
-# sysnet_id="n0000000"
+# DELETE CURRENT DATASET
+echo "Deleting current dataset"
+rm -rf $folder_training/*
+
+# CRAWL IMAGES
 # http://image-net.org/synset?wnid=n00000000
 #                                 ^^^^^^^^^
 #                                 SYNSET_ID
 
-#### DOWNLOAD IMAGES
+crawl="pipenv run imagenetscraper --size $sizepx,$sizepx --quiet"
+
 # hammer
 echo "Downloading hammer ..."
-sysnet_id="n03481172"
-$scraper $sysnet_id $folder_unsorted/hammer $size $quiet
+$crawl n03481172 $folder_training/hammer
 
 # wrench
 echo "Downloading wrench ..."
-sysnet_id="n02680754"
-$scraper $sysnet_id $folder_unsorted/wrench $size $quiet
+$crawl n02680754 $folder_training/wrench
 
 # plane
 echo "Downloading plane ..."
-sysnet_id="n03954731"
-$scraper $sysnet_id $folder_unsorted/plane $size $quiet
+$crawl n03954731 $folder_training/plane
 
-# background
-# http://slazebni.cs.illinois.edu/research/uiuc_texture_dataset.zip
+# background - http://slazebni.cs.illinois.edu/research/uiuc_texture_dataset.zip
 echo "Resizing UIUC textures ..."
-mkdir $folder_unsorted/background
+mkdir $folder_training/background
 for file in $folder_path/uiuc_texture/*.jpg; do
     fileName=$(basename "$file")
-    convert $file -resize $sizepx\x$sizepx! $folder_unsorted/background/$fileName
+    convert $file -resize $sizepx\x$sizepx! $folder_training/background/$fileName
 done
-
-#### SPLIT IN TRAIN / VAL / TEST
-echo "Splitting data in train/val/test dataset ..."
-pipenv run split_folders $folder_unsorted --output $folder_split --ratio .8 .1 .1
