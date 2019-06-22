@@ -72,13 +72,11 @@ def predict_labels(model, image, rectangles):
 
     labels = []
     for rect in rectangles:
-        # GET REGION
         x,y,w,h = rect
         crop = image[y:y+h, x:x+w]
         resize = cv.resize(crop, TARGETSIZE)
         resize = np.concatenate([resize[np.newaxis]]).astype('float32')
 
-        # PREDICT
         y_pred = model.predict(resize)
         labels.append(TOOLLABELS[np.argmax(y_pred)])
         print(y_pred)

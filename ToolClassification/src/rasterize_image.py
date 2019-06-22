@@ -11,7 +11,7 @@ from keras.models import load_model
 # LOAD DATA
 # model = load_model('tool_model_80acc.h5')
 model = load_model('tool_model.h5')
-image = cv2.imread('dataset/test_image5.jpg')
+image = cv2.imread('./data/testing/5.jpg')
 
 toolPositions = {}
 toolLabels = {
