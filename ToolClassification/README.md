@@ -1,7 +1,7 @@
 # Install
 ``` sh
 $ pip install --user pipenv           # add pipenv to $PATH
-$ pipenv install
+$ pipenv install                      # install dependencies
 ```
 
 # Usage
