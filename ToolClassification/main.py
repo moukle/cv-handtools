@@ -108,7 +108,7 @@ def save_image(img, name):
 
 
 if __name__ == "__main__":
-    orig_img = cv.imread('dataset/test_image5.jpg')
+    orig_img = cv.imread('dataset/testing/5.jpg')
     rectangles = get_rectangles_from_image(orig_img)
 
     model = load_model('tool_model.h5')
