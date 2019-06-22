@@ -104,18 +104,19 @@ def draw_rectangles(image, rectangles):
 
 
 def save_image(img, name):
-    cv.imwrite(name+'.jpg', img, [int(cv.IMWRITE_JPEG_QUALITY), 90])
+    cv.imwrite('./results/'+name+'.jpg', img, [int(cv.IMWRITE_JPEG_QUALITY), 90])
 
 
 if __name__ == "__main__":
-    orig_img = cv.imread('dataset/testing/5.jpg')
+    testfile = '5'
+    orig_img = cv.imread('./data/testing/'+testfile+'.jpg')
     rectangles = get_rectangles_from_image(orig_img)
 
-    model = load_model('tool_model.h5')
+    model = load_model('./models/tool_model.h5')
     labels = predict_labels(model, orig_img, rectangles)
 
     labeled_image = write_labels_on_image(orig_img, labels, rectangles)
     labeled_image = draw_rectangles(labeled_image, rectangles)
-    save_image(labeled_image, 'labeledImage')
+    save_image(labeled_image, 'labeledImage_'+testfile)
     cv.imshow('labeled_image', labeled_image)
     cv.waitKey(0)

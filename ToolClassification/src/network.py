@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 # LOADING THE DATA
 # -------------------------------------
 train_datagen=ImageDataGenerator(preprocessing_function=preprocess_input, validation_split=0.2) #included in our dependencies
-train_generator=train_datagen.flow_from_directory('dataset/training',
+train_generator=train_datagen.flow_from_directory('./data/training',
                                                  target_size=(224,224),
                                                  color_mode='rgb',
                                                  batch_size=32,
@@ -22,7 +22,7 @@ train_generator=train_datagen.flow_from_directory('dataset/training',
                                                  shuffle=True,
                                                  subset='training')
 
-validation_generator=train_datagen.flow_from_directory('dataset/training',
+validation_generator=train_datagen.flow_from_directory('./data/training',
                                                  target_size=(224,224),
                                                  color_mode='rgb',
                                                  batch_size=32,
@@ -72,4 +72,4 @@ model.fit_generator(
                 validation_steps=step_size_validation,
                 epochs=10)
 
-model.save('tool_model.h5')
+model.save('./models/tool_model.h5')
