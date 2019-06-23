@@ -27,6 +27,7 @@ NUMBER_OF_CLASSES = 4
 # DEFINING THE MODEL
 # --------------------------------------------------------------------------
 from keras.applications.vgg16 import VGG16
+from keras.applications.inception_v3 import InceptionV3
 from keras.layers import Input, Flatten, Dense, Dropout
 from keras.models import Model
 

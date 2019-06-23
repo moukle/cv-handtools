@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # SETTINGS
-folder_path=dataset
+folder_path=data
 folder_training=$folder_path/training
 sizepx=224
 
