@@ -4,6 +4,6 @@ LinesDetection/src/__pycache__/
 ToolClassification/.vscode
 ToolClassification/__pycache__
 
-ToolClassification/models/tool_model.h5
+ToolClassification/data/*.zip
 ToolClassification/data/uiuc_texture/
 ToolClassification/data/training/
